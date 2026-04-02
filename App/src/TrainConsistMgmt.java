@@ -1,46 +1,46 @@
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ===
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 5: Preserve Insertion Order of Bogies
+ * Use Case 6: Map Bogie to Capacity (HashMap)
  *
  * Description:
- * This class maintains the exact attachment order of bogies
- * while preventing duplicate entries using LinkedHashSet.
+ * This class associates each bogie with its seating or
+ * load capacity using a key-value mapping structure.
  *
  * @author Developer
- * @version 5.0
+ * @version 6.0
  */
 public class TrainConsistMgmt {
 
     public static void main(String[] args) {
 
-        System.out.println("========================================");
-        System.out.println("UC5 - Preserve Insertion Order of Bogies");
-        System.out.println("========================================");
+        System.out.println("==========================================");
+        System.out.println("UC6 - Map Bogie to Capacity (HashMap)");
+        System.out.println("==========================================");
 
-        // LinkedHashSet preserves insertion order and ensures uniqueness
-        Set<String> formation = new LinkedHashSet<>();
+        // HashMap stores data in key -> value format
+        Map<String, Integer> capacityMap = new HashMap<>();
 
-        // Add bogies
-        formation.add("Engine");
-        formation.add("Sleeper");
-        formation.add("Cargo");
-        formation.add("Guard");
+        // ---- Insert bogie capacities ----
+        capacityMap.put("Sleeper", 72);
+        capacityMap.put("AC Chair", 56);
+        capacityMap.put("First Class", 24);
+        capacityMap.put("Cargo", 120);
 
-        // Attempt to add duplicate
-        formation.add("Sleeper"); // will be ignored
+        // ---- Display bogie capacity details ----
+        System.out.println("\nBogie Capacity Details:");
 
-        // Display final formation
-        System.out.println("\nFinal Train Formation:");
-        System.out.println(formation);
+        for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
+            String bogie = entry.getKey();
+            Integer capacity = entry.getValue();
 
-        System.out.println("\nNote:");
-        System.out.println("LinkedHashSet preserves insertion order and removes duplicates automatically.");
+            System.out.println(bogie + " -> " + capacity);
+        }
 
-        System.out.println("\nUC5 formation setup completed...");
+        System.out.println("\nUC6 bogie-capacity mapping completed...");
     }
 }
