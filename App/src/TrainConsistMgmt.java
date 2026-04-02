@@ -1,45 +1,53 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
+/*
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 1: Initialize Train and Display Consist Summary
+ * Use Case 3: Track Unique Bogie IDs
  *
  * Description:
- * This class represents the entry point of the Train Consist
- * Management Application.
+ * This class ensures that duplicate bogie IDs are not
+ * added into the train formation using HashSet.
  *
- * At this stage, the application:
- * - Creates an empty train consist
- * - Uses a dynamic List to store bogies
- * - Displays initial bogie count
- * - Prints the current state of the train
+ * Features:
+ * - Stores bogie IDs
+ * - Prevents duplicates automatically
+ * - Displays unique bogie identifiers
  *
  * @author Ramesh
- * @version 1.0
+ * @version 3.0
  */
 
 public class TrainConsistMgmt {
 
     public static void main(String[] args) {
 
-        // Display welcome banner
         System.out.println("========================================");
-        System.out.println("=== Train Consist Management App ===");
+        System.out.println(" UC3 - Track Unique Bogie IDs ");
         System.out.println("========================================\n");
 
-        // Create a dynamic list to store train bogies
-        List<String> trainConsist = new ArrayList<>();
+        // Create a Set to store unique bogie IDs
+        // HashSet automatically ignores duplicate values
+        Set<String> bogies = new HashSet<>();
 
-        // Display initialization message
-        System.out.println("Train initialized successfully ...");
+        // ---- ADD IDs (including duplicates) ----
+        bogies.add("BG101");
+        bogies.add("BG102");
+        bogies.add("BG103");
+        bogies.add("BG104");
 
-        // Display initial consist information
-        System.out.println("Initial Bogie Count : " + trainConsist.size());
-        System.out.println("Current Train Consist : " + trainConsist);
+        // Duplicate entries (will be ignored)
+        bogies.add("BG101");
+        bogies.add("BG102");
 
-        // Final system message
-        System.out.println("\nSystem ready for operations ...");
+        // ---- DISPLAY RESULT ----
+        System.out.println("Bogie IDs After Insertion:");
+        System.out.println(bogies + "\n");
+
+        System.out.println("Note:");
+        System.out.println("Duplicates are automatically ignored by HashSet.\n");
+
+        System.out.println("UC3 uniqueness validation completed ...");
     }
 }
