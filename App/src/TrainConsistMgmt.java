@@ -13,7 +13,7 @@ import java.util.List;
  * capacity using a custom Comparator.
  *
  * @author Ramesh
- * @version 7.0
+ * @version 6.0
  */
 public class TrainConsistMgmt {
 
