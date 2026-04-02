@@ -11,7 +11,7 @@ import java.util.Map;
  * This class associates each bogie with its seating or
  * load capacity using a key-value mapping structure.
  *
- * @author Developer
+ * @author Ramesh
  * @version 6.0
  */
 public class TrainConsistMgmt {
