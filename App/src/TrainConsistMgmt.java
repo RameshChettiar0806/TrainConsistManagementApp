@@ -1,64 +1,46 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * ===
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 7: Sort Bogies by Capacity (Comparator)
+ * Use Case 5: Preserve Insertion Order of Bogies
  *
  * Description:
- * This class sorts passenger bogies based on seating
- * capacity using a custom Comparator.
+ * This class maintains the exact attachment order of bogies
+ * while preventing duplicate entries using LinkedHashSet.
  *
  * @author Ramesh
- * @version 6.0
+ * @version 5.0
  */
 public class TrainConsistMgmt {
-
-    // Inner Bogie class to model passenger bogies
-    static class Bogie {
-        String name;
-        int capacity;
-
-        // Constructor
-        Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
-        }
-    }
 
     public static void main(String[] args) {
 
         System.out.println("========================================");
-        System.out.println("UC7 - Sort Bogies by Capacity (Comparator)");
+        System.out.println("UC5 - Preserve Insertion Order of Bogies");
         System.out.println("========================================");
 
-        // Create List of passenger bogies
-        List<Bogie> bogies = new ArrayList<>();
+        // LinkedHashSet preserves insertion order and ensures uniqueness
+        Set<String> formation = new LinkedHashSet<>();
 
         // Add bogies
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("General", 90));
+        formation.add("Engine");
+        formation.add("Sleeper");
+        formation.add("Cargo");
+        formation.add("Guard");
 
-        // Display before sorting
-        System.out.println("\nBefore Sorting:");
-        for (Bogie b : bogies) {
-            System.out.println(b.name + " -> " + b.capacity);
-        }
+        // Attempt to add duplicate
+        formation.add("Sleeper"); // will be ignored
 
-        // Sort using Comparator (ascending order)
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        // Display final formation
+        System.out.println("\nFinal Train Formation:");
+        System.out.println(formation);
 
-        // Display after sorting
-        System.out.println("\nAfter Sorting by Capacity:");
-        for (Bogie b : bogies) {
-            System.out.println(b.name + " -> " + b.capacity);
-        }
+        System.out.println("\nNote:");
+        System.out.println("LinkedHashSet preserves insertion order and removes duplicates automatically.");
 
-        System.out.println("\nUC7 sorting completed...");
+        System.out.println("\nUC5 formation setup completed...");
     }
 }
