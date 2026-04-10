@@ -4,86 +4,78 @@ import java.util.*;
  * ============================================
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 12: Safety Compliance Check for Goods Bogies
+ * Use Case 14: Handle Invalid Bogie Capacity
  *
  * Description:
- * This use case validates safety rules for goods bogies
- * using Java Streams and allMatch().
+ * This use case enforces capacity validation using
+ * a custom checked exception to prevent invalid
+ * passenger bogie creation.
  *
  * Business Rule:
- * - Cylindrical bogies → ONLY carry "Petroleum"
- * - Other bogies → can carry any cargo
+ * - Capacity must be > 0
  *
  * Key Concepts:
- * - Stream API
- * - allMatch() terminal operation
- * - Lambda expressions
- * - Short-circuit evaluation
- * - Domain rule enforcement
+ * - Custom Exception
+ * - Fail-fast validation
+ * - throws & throw
+ * - Defensive programming
  *
  * @author Ramesh Harisabapathi Chettiar
- * @version 12.1
+ * @version 14.1
  * ============================================
  */
 public class TrainConsistMgmt {
 
     /**
-     * Inner Class - GoodsBogie
-     * Represents goods bogie with type and cargo
+     * Custom Exception
      */
-    static class GoodsBogie {
-        String type;
-        String cargo;
-
-        GoodsBogie(String type, String cargo) {
-            this.type = type;
-            this.cargo = cargo;
-        }
-
-        @Override
-        public String toString() {
-            return type + " -> " + cargo;
+    public static class InvalidCapacityException extends Exception {
+        public InvalidCapacityException(String message) {
+            super(message);
         }
     }
 
     /**
-     * Core Business Logic
-     * Validates safety compliance using allMatch()
+     * Passenger Bogie Model
      */
-    public static boolean isTrainSafe(List<GoodsBogie> bogies) {
-        return bogies.stream()
-                .allMatch(b ->
-                        !b.type.equalsIgnoreCase("Cylindrical") ||
-                                b.cargo.equalsIgnoreCase("Petroleum")
-                );
+    public static class PassengerBogie {
+        String type;
+        int capacity;
+
+        public PassengerBogie(String type, int capacity) throws InvalidCapacityException {
+
+            if (capacity <= 0) {
+                throw new InvalidCapacityException("Capacity must be greater than zero");
+            }
+
+            this.type = type;
+            this.capacity = capacity;
+        }
+
+        @Override
+        public String toString() {
+            return type + " -> " + capacity;
+        }
     }
 
     public static void main(String[] args) {
 
         System.out.println("========================================");
-        System.out.println("UC12 - Safety Compliance Check");
+        System.out.println("UC14 - Handle Invalid Bogie Capacity");
         System.out.println("========================================\n");
 
-        // Create goods bogies
-        List<GoodsBogie> goodsBogies = new ArrayList<>();
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        goodsBogies.add(new GoodsBogie("Open", "Coal"));
-        goodsBogies.add(new GoodsBogie("Box", "Grain"));
-        goodsBogies.add(new GoodsBogie("Cylindrical", "Coal")); // violation
+        try {
+            PassengerBogie b1 = new PassengerBogie("Sleeper", 72);
+            System.out.println("Created Bogie: " + b1);
 
-        System.out.println("Goods Bogies in Train:");
-        goodsBogies.forEach(System.out::println);
+            // Invalid case
+            PassengerBogie b2 = new PassengerBogie("AC Chair", 0);
+            System.out.println("Created Bogie: " + b2);
 
-        boolean isSafe = isTrainSafe(goodsBogies);
-
-        System.out.println("\nSafety Compliance Status: " + isSafe);
-
-        if (isSafe) {
-            System.out.println("Train formation is SAFE.");
-        } else {
-            System.out.println("Train formation is NOT SAFE.");
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
-        System.out.println("\nUC12 safety validation completed...");
+        System.out.println("\nUC14 exception handling completed...");
     }
 }
