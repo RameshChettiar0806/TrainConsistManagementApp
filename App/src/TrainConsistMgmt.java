@@ -1,72 +1,54 @@
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * ============================================
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 16: Sort Passenger Bogies by Capacity
+ * Use Case 17: Sort Bogie Names Using Arrays.sort()
  *
  * Description:
- * This use case demonstrates manual sorting of
- * passenger bogie capacities using Bubble Sort.
+ * This use case demonstrates sorting of bogie type
+ * names alphabetically using Java's built-in
+ * Arrays.sort() method.
  *
  * Key Concepts:
- * - Bubble Sort Algorithm
- * - Nested loops
- * - Swapping logic
- * - Algorithmic thinking
+ * - Arrays.sort()
+ * - Natural ordering (String)
+ * - Library optimization (O(n log n))
+ * - Clean and maintainable code
  *
  * @author Ramesh Harisabapathi Chettiar
- * @version 16.1
+ * @version 17.1
  * ============================================
  */
 public class TrainConsistMgmt {
 
     /**
-     * Bubble Sort Logic
+     * Sorting Logic using Arrays.sort()
      */
-    public static void bubbleSort(int[] arr) {
-
-        int n = arr.length;
-
-        for (int i = 0; i < n - 1; i++) {
-
-            for (int j = 0; j < n - i - 1; j++) {
-
-                if (arr[j] > arr[j + 1]) {
-                    // Swap
-                    int temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
-            }
-        }
+    public static void sortBogieNames(String[] bogieNames) {
+        Arrays.sort(bogieNames);
     }
 
     public static void main(String[] args) {
 
         System.out.println("========================================");
-        System.out.println("UC16 - Manual Sorting using Bubble Sort");
+        System.out.println("UC17 - Sort Bogie Names Using Arrays.sort()");
         System.out.println("========================================\n");
 
-        // Input array
-        int[] capacities = {72, 56, 24, 70, 60};
+        String[] bogieNames = {
+                "Sleeper", "AC Chair", "First Class", "General", "Luxury"
+        };
 
-        // Display original
-        System.out.println("Original Capacities:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
+        System.out.println("Original Bogie Names:");
+        System.out.println(Arrays.toString(bogieNames));
 
-        // Apply sorting
-        bubbleSort(capacities);
+        // Sorting
+        sortBogieNames(bogieNames);
 
-        // Display sorted
-        System.out.println("\n\nSorted Capacities (Ascending):");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
+        System.out.println("\nSorted Bogie Names (Alphabetical):");
+        System.out.println(Arrays.toString(bogieNames));
 
-        System.out.println("\n\nUC16 sorting completed...");
+        System.out.println("\nUC17 sorting completed...");
     }
 }
