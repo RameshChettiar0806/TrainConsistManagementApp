@@ -1,69 +1,59 @@
 import org.junit.jupiter.api.Test;
-import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TrainConsistMgmtTest {
 
-    private List<TrainConsistMgmt.Bogie> getSampleData() {
-        return Arrays.asList(
-                new TrainConsistMgmt.Bogie("Sleeper", 72),
-                new TrainConsistMgmt.Bogie("AC Chair", 56),
-                new TrainConsistMgmt.Bogie("First Class", 24),
-                new TrainConsistMgmt.Bogie("General", 90)
-        );
+    @Test
+    void testCargo_SafeAssignment() {
+        TrainConsistMgmt.GoodsBogie bogie =
+                new TrainConsistMgmt.GoodsBogie("Cylindrical");
+
+        bogie.assignCargo("Petroleum");
+
+        assertEquals("Petroleum", bogie.cargo);
     }
 
     @Test
-    void testLoopFilteringLogic() {
-        List<TrainConsistMgmt.Bogie> result =
-                TrainConsistMgmt.filterWithLoop(getSampleData());
+    void testCargo_UnsafeAssignmentHandled() {
+        TrainConsistMgmt.GoodsBogie bogie =
+                new TrainConsistMgmt.GoodsBogie("Rectangular");
 
-        assertTrue(result.stream().allMatch(b -> b.capacity > 60));
+        bogie.assignCargo("Petroleum");
+
+        assertNull(bogie.cargo); // should not be assigned
     }
 
     @Test
-    void testStreamFilteringLogic() {
-        List<TrainConsistMgmt.Bogie> result =
-                TrainConsistMgmt.filterWithStream(getSampleData());
+    void testCargo_CargoNotAssignedAfterFailure() {
+        TrainConsistMgmt.GoodsBogie bogie =
+                new TrainConsistMgmt.GoodsBogie("Rectangular");
 
-        assertTrue(result.stream().allMatch(b -> b.capacity > 60));
+        bogie.assignCargo("Petroleum");
+
+        assertNull(bogie.cargo);
     }
 
     @Test
-    void testLoopAndStreamResultsMatch() {
-        List<TrainConsistMgmt.Bogie> loopResult =
-                TrainConsistMgmt.filterWithLoop(getSampleData());
+    void testCargo_ProgramContinuesAfterException() {
+        TrainConsistMgmt.GoodsBogie b1 =
+                new TrainConsistMgmt.GoodsBogie("Rectangular");
 
-        List<TrainConsistMgmt.Bogie> streamResult =
-                TrainConsistMgmt.filterWithStream(getSampleData());
+        TrainConsistMgmt.GoodsBogie b2 =
+                new TrainConsistMgmt.GoodsBogie("Cylindrical");
 
-        assertEquals(loopResult.size(), streamResult.size());
+        b1.assignCargo("Petroleum"); // fails
+        b2.assignCargo("Coal");      // should still work
+
+        assertEquals("Coal", b2.cargo);
     }
 
     @Test
-    void testExecutionTimeMeasurement() {
-        List<TrainConsistMgmt.Bogie> data = getSampleData();
+    void testCargo_FinallyBlockExecution() {
+        TrainConsistMgmt.GoodsBogie bogie =
+                new TrainConsistMgmt.GoodsBogie("Rectangular");
 
-        long start = System.nanoTime();
-        TrainConsistMgmt.filterWithLoop(data);
-        long end = System.nanoTime();
-
-        long elapsed = end - start;
-
-        assertTrue(elapsed > 0);
-    }
-
-    @Test
-    void testLargeDatasetProcessing() {
-        List<TrainConsistMgmt.Bogie> bogies = new ArrayList<>();
-
-        for (int i = 0; i < 10000; i++) {
-            bogies.add(new TrainConsistMgmt.Bogie("Type", i));
-        }
-
-        List<TrainConsistMgmt.Bogie> result =
-                TrainConsistMgmt.filterWithStream(bogies);
-
-        assertNotNull(result);
+        // We can't directly assert finally output,
+        // but we ensure method completes without crash
+        assertDoesNotThrow(() -> bogie.assignCargo("Petroleum"));
     }
 }

@@ -1,102 +1,95 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * ============================================
  * MAIN CLASS - TrainConsistMgmt
  *
- * Use Case 13: Performance Comparison (Loops vs Streams)
+ * Use Case 15: Safe Cargo Assignment Using try-catch-finally
  *
  * Description:
- * This use case compares execution time of loop-based
- * filtering versus stream-based filtering using
- * System.nanoTime().
+ * This use case safely assigns cargo to goods bogies
+ * using runtime exception handling (try-catch-finally).
+ *
+ * Business Rule:
+ * - Rectangular bogie cannot carry Petroleum
  *
  * Key Concepts:
- * - Performance Benchmarking
- * - System.nanoTime()
- * - Loop vs Stream processing
- * - Evidence-driven optimization
+ * - Runtime Exception
+ * - try-catch-finally
+ * - Graceful failure handling
+ * - Defensive runtime validation
  *
  * @author Ramesh Harisabapathi Chettiar
- * @version 13.1
+ * @version 15.1
  * ============================================
  */
 public class TrainConsistMgmt {
 
     /**
-     * Inner Class - Bogie
+     * Custom Runtime Exception
      */
-    static class Bogie {
-        String type;
-        int capacity;
+    public static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
+            super(message);
+        }
+    }
 
-        Bogie(String type, int capacity) {
-            this.type = type;
-            this.capacity = capacity;
+    /**
+     * Goods Bogie Model
+     */
+    public static class GoodsBogie {
+        String shape;
+        String cargo;
+
+        public GoodsBogie(String shape) {
+            this.shape = shape;
+        }
+
+        /**
+         * Assign cargo with validation
+         */
+        public void assignCargo(String cargo) {
+            try {
+                // Safety Rule
+                if (shape.equalsIgnoreCase("Rectangular") &&
+                        cargo.equalsIgnoreCase("Petroleum")) {
+
+                    throw new CargoSafetyException("Unsafe cargo assignment!");
+                }
+
+                this.cargo = cargo;
+                System.out.println("Cargo assigned successfully -> " + cargo);
+
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+
+            } finally {
+                System.out.println("Cargo validation completed for " + shape + " bogie");
+            }
         }
 
         @Override
         public String toString() {
-            return type + " -> " + capacity;
+            return shape + " -> " + cargo;
         }
-    }
-
-    /**
-     * Loop-based filtering
-     */
-    public static List<Bogie> filterWithLoop(List<Bogie> bogies) {
-        List<Bogie> result = new ArrayList<>();
-        for (Bogie b : bogies) {
-            if (b.capacity > 60) {
-                result.add(b);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Stream-based filtering
-     */
-    public static List<Bogie> filterWithStream(List<Bogie> bogies) {
-        return bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
     }
 
     public static void main(String[] args) {
 
         System.out.println("========================================");
-        System.out.println("UC13 - Performance Comparison");
+        System.out.println("UC15 - Safe Cargo Assignment");
         System.out.println("========================================\n");
 
-        // Create large dataset
-        List<Bogie> bogies = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
-            bogies.add(new Bogie("Type" + (i % 3), 50 + (i % 50)));
-        }
+        // Safe case
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        b1.assignCargo("Petroleum");
 
-        // -------- LOOP BENCHMARK --------
-        long startLoop = System.nanoTime();
-        List<Bogie> loopResult = filterWithLoop(bogies);
-        long endLoop = System.nanoTime();
+        System.out.println();
 
-        long loopTime = endLoop - startLoop;
+        // Unsafe case
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
+        b2.assignCargo("Petroleum");
 
-        // -------- STREAM BENCHMARK --------
-        long startStream = System.nanoTime();
-        List<Bogie> streamResult = filterWithStream(bogies);
-        long endStream = System.nanoTime();
-
-        long streamTime = endStream - startStream;
-
-        // Output
-        System.out.println("Loop Execution Time (ns): " + loopTime);
-        System.out.println("Stream Execution Time (ns): " + streamTime);
-
-        System.out.println("\nFiltered Count (Loop): " + loopResult.size());
-        System.out.println("Filtered Count (Stream): " + streamResult.size());
-
-        System.out.println("\nUC13 performance benchmarking completed...");
+        System.out.println("\nUC15 runtime handling completed...");
     }
 }
